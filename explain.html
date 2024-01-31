@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    td,
+    th {
+        border: 3px solid;
+        width: 200px;
+
+        border-color: black;
+    }
+
+    table {
+        border-collapse: collapse;
+        height: 650px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    .style{
+        font-weight: bolder;
+        font-size: xx-large;
+    }
+    tr:hover{
+        background-color: rgb(255, 255, 20);
+    }
+</style>
+
+<body>
+    <h1 style="text-align: center" >http://localhost:5000       :כתובת השרת</h1>
+    <p class="style">products</p>
+    <table>
+        <tr>
+            <th>מקרי קיצון</th>
+            <th>query params</th>
+            <th> url מה הכתובת </th>
+            <th>bodyמה שולחים ב</th>
+            <th>method איזה </th>
+            <th>הסבר</th>
+            <th>מה מחזיר</th>
+            <th>איזה פעולה</th>
+        </tr>
+        <tr>
+            <td>-</td>
+            <td>searchProductName, searchPrice,page,perPage</td>
+            <td>/api/products</td>
+            <td>-</td>
+            <td>get</td>
+            <td> שליפת כל המוצרים, ניתנת אפשרות לקבלת המוצרים לפי חיפוש שם מוצר ומחיר וכן הכנסת ערך page כדי לקפוץ לעמוד
+                מסוים וכן משתנה perPage שיאפשר שינוי בכמות המוצרים המוצגים בדף</td>
+            <td>products[{_id,price,productName, description,imagePath,createDate}]</td>
+            <td>read</td>
+        </tr>
+        <tr>
+            <td>אם id לא תקין- יחזיר קוד 400 ואם אין כזה מוצר יחזיר 404</td>
+            <td>id</td>
+            <td>/api/products/{id}</td>
+            <td>-</td>
+            <td>get</td>
+            <td>שליפת מוצר לפי קוד מוצר</td>
+            <td>{_id,price,productName, description,imagePath,createDate}</td>
+            <td>read</td>
+        </tr>
+        <tr>
+            <td>אם קיים מוצר עם כזה שם מחזיר קוד 409</td>
+            <td>-</td>
+            <td>/api/products</td>
+            <td>{price,productName,description, imagePath,createDate}</td>
+            <td>post</td>
+            <td>מוסיף מוצר חדש למסד הנתונים ומחזיר אותו</td>
+            <td>{_id,price,productName,description, imagePath,createDate}</td>
+            <td>create</td>
+        </tr>
+        <tr>
+            <td>אם id לא תקין מחזיר קוד 400, ואם לא נמצא מוצר עם כזה id מחזיר קוד 404</td>
+            <td>-</td>
+            <td>/api/products/{id}</td>
+            <td>-</td>
+            <td>delete</td>
+            <td> ומוחק מוצר עם קוד זה ממסד הנתונים ומחזיר אותו id מקבל</td>
+            <td>{_id,price,productName,description, imagePath,createDate}</td>
+            <td>delete</td>
+        </tr>
+        <tr>
+            <td>אם הקוד לא תקין מחזיר 40 ואם אין מוצר עם כזה קוד מחזיר 404</td>
+            <td>-</td>
+            <td>/api/products/{id}</td>
+            <td>אוביקט עם השדות שרוצים לעדכן</td>
+            <td>put</td>
+            <td> מעדכן את המוצר ומחזיר אותו id מקבל</td>
+            <td>{_id,price,productName,description, imagePath,createDate}</td>
+            <td>update</td>
+        </tr>
+    </table>
+
+    <p class="style">users</p>
+    <table>
+        <tr>
+            <th>מקרי קיצון</th>
+            <th>query params</th>
+            <th> url מה הכתובת </th>
+            <th>bodyמה שולחים ב</th>
+            <th>method איזה </th>
+            <th>הסבר</th>
+            <th>מה מחזיר</th>
+            <th>איזה פעולה</th>
+        </tr>
+        <tr>
+            <td>-</td>
+            <td>-</td>
+            <td>/api/users</td>
+            <td>-</td>
+            <td>get</td>
+            <td>שליפת כל המשתמשים מורשה רק למי שהשדה role שלו הוא ADMIN</td>
+            <td>users[{_id,userEmail,userName, role,websiteRegistrationDate}]</td>
+            <td>read</td>
+        </tr>
+        <tr>
+            <td>אם קיים משתמש עם אותו שם ואותו מייל מחזיר קוד 409</td>
+            <td>-</td>
+            <td>/api/users</td>
+            <td>{userPassword,userEmail,userName,websiteRegistrationDate} (role-אין אפשרות להכניס מנהל נוסף לאחר הכנסת מנהל אחד)</td>
+            <td>post</td>
+            <td>מוסיף משתמש חדש למסד הנתונים ומחזיר אותו ובנוסף מחזיר token, </td>
+            <td>{_id,userEmail,userName,role ,websiteRegistrationDate,token}</td>
+            <td>create</td>
+        </tr>
+        <tr>
+            <td>בודק האם קיים משתמש במסד הנתונים שהשם והסיסמא שנשלחו מתאימים לו</td>
+            <td>-</td>
+            <td>/api/users/login</td>
+            <td>{userPassword,userEmail}</td>
+            <td>post</td>
+            <td>כניסת משתמש רשום וקבלתtoken בחזרה</td>
+            <td>{token}</td>
+            <td>create</td>
+        </tr>
+       
+
+    </table>
+    <p class="style">orders</p>
+    <table>
+        <tr>
+            <th> מקרי קיצון</th>                       
+            <th>query params</th>
+            <th> url מה הכתובת </th>
+            <th>bodyמה שולחים ב</th>
+            <th>method איזה </th>            
+            <th>הסבר</th>
+            <th>מה מחזיר</th>
+            <th>איזה פעולה</th>
+        </tr>
+        <tr>
+            <td>-</td>
+            <td>-</td>
+            <td>/api/orders</td>
+            <td>-</td>
+            <td>get</td>
+            <td>שליפת כל ההזמנות, מורשה רק למי שהשדה role שלו הוא ADMIN</td>
+            <td>orders[{_id,orderDate,dedLine,orderAddress ,invaitingCode,
+                orderedProducts:{_id,productName,price, imagePath,account},orderInTheWay}]</td>
+            <td>read</td>
+        </tr>
+        <tr>
+            <td>אם הקוד שנשלח אינו תקין, מחזיר קוד 400, אם לא קיימת הזמנה עם כזה קוד - מחזיר 404</td>
+            <td>-</td>
+            <td>/api/orders/{id}</td>
+            <td>-</td>
+            <td>delete</td>
+            <td>מחיקת נזמנה לפי id מורשה רק למנהל או למשתמש שביצעה אותה</td>
+            <td>{_id,orderDate,dedLine,orderAddress ,invaitingCode,
+                orderedProducts:{_id,productName,price, imagePath,account},orderInTheWay}</td>
+            <td>delete</td>
+        </tr>
+        <tr>
+            <td>-</td>
+            <td>-</td>
+            <td>/api/orders</td>
+            <td>{dedLine,orderAddress,
+                orderedProducts:{_id,productName,price, imagePath,account}}</td>
+            <td>post</td>
+            <td>הוספת הזמנה, מורשה רק למשתמש רשום </td>
+            <td>{_id,orderDate,dedLine,orderAddress ,invaitingCode,
+                orderedProducts:{_id,productName,price, imagePath,account},orderInTheWay}</td>
+            <td>create</td>
+        </tr>
+        <tr>
+            <td>-</td>
+            <td>-</td>
+            <td>/api/orders/byInvatingCode</td>
+            <td>invaitingCode- אופציונלי למנהל</td>
+            <td>get</td>
+            <td>שליפת כל ההזמנות של משתמש רשום, קיימת אפשרות למנהל לשלוח ב body בשדה invaitingCode את קוד הלקוח ולקבל את כל הזמנותיו </td>
+            <td>orders[{_id,orderDate,dedLine,orderAddress ,invaitingCode,
+                orderedProducts:{_id,productName,price, imagePath,account},orderInTheWay}]</td>
+            <td>read</td>
+        </tr>
+        <tr>
+            <td>אם הקוד לא תקין- מחזיר קוד 400, ואם לא קיימת הזמנה עם כזה קוד- מחזיר קוד 404</td>
+            <td>-</td>
+            <td>/api/orders/{id}</td>
+            <td>-</td>
+            <td>put</td>
+            <td>מעדכן את השדה orderInTheWay ל-true, אפשרי רק למנהל </td>
+            <td>{_id,orderDate,dedLine,orderAddress ,invaitingCode,
+                orderedProducts:{_id,productName,price, imagePath,account},orderInTheWay}</td>
+            <td>update</td>
+        </tr>
+        
+        
+    </table>
+
+
+</body>
+
+</html>
